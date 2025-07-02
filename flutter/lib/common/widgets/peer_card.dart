@@ -1338,15 +1338,60 @@ void _rdpDialog(String id) async {
   });
 }
 
+// Widget getOnline(double rightPadding, bool online) {
+//   return Tooltip(
+//       message: translate(online ? 'Online' : 'Offline'),
+//       waitDuration: const Duration(seconds: 1),
+//       child: Padding(
+//           padding: EdgeInsets.fromLTRB(0, 4, rightPadding, 4),
+//           child: CircleAvatar(
+//               radius: 3, backgroundColor: online ? Colors.green : kColorWarn)));
+// }
+
 Widget getOnline(double rightPadding, bool online) {
-  return Tooltip(
-      message: translate(online ? 'Online' : 'Offline'),
-      waitDuration: const Duration(seconds: 1),
-      child: Padding(
-          padding: EdgeInsets.fromLTRB(0, 4, rightPadding, 4),
-          child: CircleAvatar(
-              radius: 3, backgroundColor: online ? Colors.green : kColorWarn)));
+  return Container(
+    padding: EdgeInsets.only(right: rightPadding),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        // 状态指示器（形状区分提升识别度）
+        Tooltip(
+          message: translate(online ? 'Online' : 'Offline'),
+          waitDuration: const Duration(seconds: 1),
+          child: Container(
+            margin: EdgeInsets.only(right: 5),
+            child: online
+                ? CircleAvatar( // 在线：圆形（正常状态）
+                    radius: 4,
+                    backgroundColor: const Color(0xFF4285F4)) // 蓝色
+                : ClipRRect( // 离线：正方形（异常状态）
+                    borderRadius: BorderRadius.circular(2),
+                    child: Container(
+                      width: 8,
+                      height: 8,
+                      color: const Color(0xFFDB4437) // 红色
+                    ),
+                  ),
+          ),
+        ),
+        
+        // 状态文字（使用高对比度颜色）
+        Text(
+          translate(online ? 'Online' : 'Offline'),
+          style: TextStyle(
+            fontSize: 12,
+            color: online 
+              ? const Color(0xFF4285F4)  // 蓝色
+              : const Color(0xFFDB4437), // 红色
+            fontWeight: FontWeight.w500 // 稍粗的文字提高可读性
+          ),
+        )
+      ],
+    ),
+  );
 }
+
 
 Widget build_more(BuildContext context, {bool invert = false}) {
   final RxBool hover = false.obs;
